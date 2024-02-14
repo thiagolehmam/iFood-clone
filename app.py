@@ -1,90 +1,65 @@
-from modelos.restaurante import Restaurante
-import os
 
+class App:
+    def __init__(self):
+        self.restaurantes = []
 
-def exibir_nome_do_programa():
-    ''' Exibe o nome estilizado do programa na tela '''
-    print("""        
-─╔═══╗───────╔╗
-─║╔══╝───────║║
-╔╣╚══╦══╦══╦═╝║
-╠╣╔══╣╔╗║╔╗║╔╗║
-║║║──║╚╝║╚╝║╚╝║
-╚╩╝──╚══╩══╩══╝
-""")
+    def exibir_nome_do_programa(self):
+        ''' Exibe o nome estilizado do programa na tela '''
+        print("""
+              
+      𝑖𝐹𝑜𝑜𝑑
+              
+        """)
 
-def exibir_opcoes():
-    ''' Exibe as opções disponíveis no menu principal '''
-    print('1. Cadastrar restaurante')
-    print('2. Listar restaurantes')
-    print('3. Alternar estado do restaurante')
-    print('4. Sair\n')
+    def exibir_opcoes(self):
+        ''' Exibe as opções disponíveis no menu principal '''
+        print('1. Cadastrar restaurante')
+        print('2. Listar restaurantes')
+        print('3. Alternar estado do restaurante')
+        print('4. Sair\n')
 
-def finalizar_app():
-    ''' Exibe mensagem de finalização do aplicativo '''
-    exibir_subtitulo('Finalizar app')
+    def finalizar_app(self):
+        ''' Exibe mensagem de finalização do aplicativo '''
+        self.exibir_subtitulo('Finalizar app')
 
-def voltar_ao_menu_principal():
-    ''' Solicita uma tecla para voltar ao menu principal
+    def voltar_ao_menu_principal(self):
+        ''' Solicita uma tecla para voltar ao menu principal '''
+        input('\nDigite uma tecla para voltar ao menu ')
+        self.main()
 
-    Outputs:
-    - Retorna ao menu principal
-    '''
-    input('\nDigite uma tecla para voltar ao menu ')
-    main()
+    def opcao_invalida(self):
+        ''' Exibe mensagem de opção inválida e retorna ao menu principal '''
+        print('Opção inválida!\n')
+        self.voltar_ao_menu_principal()
 
-def opcao_invalida():
-    ''' Exibe mensagem de opção inválida e retorna ao menu principal
+    def exibir_subtitulo(self, texto):
+        ''' Exibe um subtítulo estilizado na tela '''
+        os.system('cls')
+        linha = '*' * (len(texto))
+        print(linha)
+        print(texto)
+        print(linha)
+        print()
 
-    Outputs:
-    - Retorna ao menu principal
-    '''
-    print('Opção inválida!\n')
-    voltar_ao_menu_principal()
+    def cadastrar_novo_restaurante(self):
+        ''' Essa função é responsável por cadastrar um novo restaurante '''
+        self.exibir_subtitulo('Cadastro de novos restaurantes')
+        restaurante = Restaurante.cadastrar_novo_restaurante()
+        self.restaurantes.append(restaurante)
+        print(f'O restaurante {restaurante.nome} foi cadastrado com sucesso!')
+        self.voltar_ao_menu_principal()
 
-def exibir_subtitulo(texto):
-    ''' Exibe um subtítulo estilizado na tela
+    def listar_restaurantes(self):
+        ''' Lista os restaurantes presentes na lista '''
+        Restaurante.listar_restaurantes(self.restaurantes)
+        self.voltar_ao_menu_principal()
 
-    Inputs:
-    - texto: str - O texto do subtítulo
-    '''
-    os.system('cls')
-    linha = '*' * (len(texto))
-    print(linha)
-    print(texto)
-    print(linha)
-    print()
+    def alternar_estado_restaurante(self):
+        ''' Altera o estado ativo/desativado de um restaurante '''
+        Restaurante.alternar_estado_restaurante(self.restaurantes)
+        self.voltar_ao_menu_principal()
 
-def escolher_opcao():
-    ''' Solicita e executa a opção escolhida pelo usuário
-
-    Outputs:
-    - Executa a opção escolhida pelo usuário
-    '''
-    try:
-        opcao_escolhida = int(input('Escolha uma opção: '))
-        if opcao_escolhida == 1:
-            nome_do_restaurante = input('Digite o nome do restaurante que deseja cadastrar: ')
-            categoria = input(f'Digite o nome da categoria do restaurante {nome_do_restaurante}: ')
-            print(Restaurante.cadastrar_novo(nome_do_restaurante, categoria))
-        elif opcao_escolhida == 2:
-            Restaurante.listar_todos()
-        elif opcao_escolhida == 3:
-            nome_do_restaurante = input('Digite o nome do restaurante que deseja alterar o estado: ')
-            print(Restaurante.alternar_estado(nome_do_restaurante))
-        elif opcao_escolhida == 4:
-            finalizar_app()
-        else:
-            opcao_invalida()
-    except:
-        opcao_invalida()
-
-def main():
-    ''' Função principal que inicia o programa '''
-    os.system('cls')
-    exibir_nome_do_programa()
-    exibir_opcoes()
-    escolher_opcao()
-
-if __name__ == '__main__':
-    main()
+    def escolher_opcao(self):
+        ''' Solicita e executa a opção escolhida pelo usuário '''
+        try:
+            opcao

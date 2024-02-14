@@ -1,25 +1,43 @@
+import os
+
 class Restaurante:
-    restaurantes = []
+    def __init__(self, nome, categoria, ativo=False):
+        self.nome = nome
+        self.categoria = categoria
+        self.ativo = ativo
 
-    def __init__(self, nome, categoria):
-        self.nome = nome.title()
-        self.categoria = categoria.upper()
-        self.ativo = False
-        Restaurante.restaurantes.append(self)
+    def ativar_desativar(self):
+        self.ativo = not self.ativo
 
-    @classmethod
-    def listar_todos(cls):
-        for restaurante in cls.restaurantes:
-            print(f'Nome: {restaurante.nome}, Categoria: {restaurante.categoria}, Ativo: {restaurante.ativo}')
+    def __str__(self):
+        return f"Nome: {self.nome}, Categoria: {self.categoria}, Ativo: {'Sim' if self.ativo else 'Não'}"
 
     @classmethod
-    def alternar_estado(cls, nome_restaurante):
-        for restaurante in cls.restaurantes:
+    def cadastrar_novo_restaurante(cls):
+        ''' Cadastra um novo restaurante '''
+        nome_do_restaurante = input('Digite o nome do restaurante que deseja cadastrar: ')
+        categoria = input(f'Digite o nome da categoria do restaurante {nome_do_restaurante}: ')
+        return cls(nome_do_restaurante, categoria)
+
+    @staticmethod
+    def listar_restaurantes(restaurantes):
+        ''' Lista os restaurantes presentes na lista '''
+        print('Listando restaurantes:')
+        for restaurante in restaurantes:
+            print(restaurante)
+
+    @staticmethod
+    def alternar_estado_restaurante(restaurantes):
+        ''' Altera o estado ativo/desativado de um restaurante '''
+        nome_restaurante = input('Digite o nome do restaurante que deseja alterar o estado: ')
+        restaurante_encontrado = False
+        for restaurante in restaurantes:
             if restaurante.nome == nome_restaurante:
-                restaurante.ativo = not restaurante.ativo
-                return f'O restaurante {restaurante.nome} foi ativado' if restaurante.ativo else f'O restaurante {restaurante.nome} foi desativado'
+                restaurante_encontrado = True
+                restaurante.ativar_desativar()
+                mensagem = f'O restaurante {nome_restaurante} foi ativado com sucesso' if restaurante.ativo else f'O restaurante {nome_restaurante} foi desativado com sucesso'
+                print(mensagem)
+                break
+        if not restaurante_encontrado:
+            print('O restaurante não foi encontrado')
 
-    @classmethod
-    def cadastrar_novo(cls, nome, categoria):
-        novo_restaurante = Restaurante(nome, categoria)
-        return f'O restaurante {novo_restaurante.nome} foi cadastrado com sucesso!'
