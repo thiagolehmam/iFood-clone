@@ -1,3 +1,5 @@
+import os
+from modelos.restaurante import Restaurante
 
 class App:
     def __init__(self):
@@ -41,25 +43,59 @@ class App:
         print(linha)
         print()
 
+    def escolher_opcao(self):
+        ''' Solicita e executa a opção escolhida pelo usuário '''
+        try:
+            opcao_escolhida = int(input('Escolha uma opção: '))
+            if opcao_escolhida == 1:
+                self.cadastrar_novo_restaurante()
+            elif opcao_escolhida == 2:
+                self.listar_restaurantes()
+            elif opcao_escolhida == 3:
+                self.alternar_estado_restaurante()
+            elif opcao_escolhida == 4:
+                self.finalizar_app()
+            else:
+                self.opcao_invalida()
+        except ValueError:
+            self.opcao_invalida()
+
+    def main(self):
+        ''' Função principal que inicia o programa '''
+        os.system('cls')
+        self.exibir_nome_do_programa()
+        self.exibir_opcoes()
+        self.escolher_opcao()
+
     def cadastrar_novo_restaurante(self):
         ''' Essa função é responsável por cadastrar um novo restaurante '''
         self.exibir_subtitulo('Cadastro de novos restaurantes')
-        restaurante = Restaurante.cadastrar_novo_restaurante()
+        nome_do_restaurante = input('Digite o nome do restaurante que deseja cadastrar: ')
+        categoria = input(f'Digite o nome da categoria do restaurante {nome_do_restaurante}: ')
+        restaurante = Restaurante.criar_restaurante(nome_do_restaurante, categoria)
         self.restaurantes.append(restaurante)
-        print(f'O restaurante {restaurante.nome} foi cadastrado com sucesso!')
+        print(f'O restaurante {nome_do_restaurante} foi cadastrado com sucesso!')
         self.voltar_ao_menu_principal()
 
     def listar_restaurantes(self):
         ''' Lista os restaurantes presentes na lista '''
-        Restaurante.listar_restaurantes(self.restaurantes)
+        self.exibir_subtitulo('Listando restaurantes')
+        Restaurante.listar_todos(self.restaurantes)
         self.voltar_ao_menu_principal()
 
     def alternar_estado_restaurante(self):
         ''' Altera o estado ativo/desativado de um restaurante '''
-        Restaurante.alternar_estado_restaurante(self.restaurantes)
+        self.exibir_subtitulo('Alterando estado do restaurante')
+        nome_restaurante = input('Digite o nome do restaurante que deseja alterar o estado: ')
+        restaurante = Restaurante.encontrar_por_nome(self.restaurantes, nome_restaurante)
+        if restaurante:
+            restaurante.alternar_estado()
+            mensagem = f'O restaurante {nome_restaurante} foi ativado com sucesso' if restaurante.ativo else f'O restaurante {nome_restaurante} foi desativado com sucesso'
+            print(mensagem)
+        else:
+            print('O restaurante não foi encontrado')
         self.voltar_ao_menu_principal()
 
-    def escolher_opcao(self):
-        ''' Solicita e executa a opção escolhida pelo usuário '''
-        try:
-            opcao
+if __name__ == '__main__':
+    app = App()
+    app.main()
